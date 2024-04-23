@@ -1,7 +1,7 @@
-name: Workflow Manual
+name: Workflow Manual 02
 
 on: 
-    workflow_dispatch:
+    workflow_dispatch: #disparo manual
 
 jobs:
     build:
