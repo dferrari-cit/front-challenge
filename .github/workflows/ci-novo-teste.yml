@@ -1,0 +1,12 @@
+name: After Release 02
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  after-release:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Show parametros
+          run: echo "===============> Version from ${GITHUB_REF##*/}"
