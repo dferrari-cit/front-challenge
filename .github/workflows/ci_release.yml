@@ -8,4 +8,5 @@ jobs:
   after-release:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Name: ${{ github.event.release.name }} - Description: ${{ github.event.release.body }} - Tag: ${{ github.event.release.tag_name }}"
+        - name: Show parametros
+          run: echo "nome: ${{ github.event.release.name }} - descricao: ${{ github.event.release.body }} - tag: ${{ github.event.release.tag_name }}"
