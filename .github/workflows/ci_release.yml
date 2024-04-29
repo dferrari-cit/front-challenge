@@ -1,0 +1,9 @@
+name: After Release
+on: 
+    workflow_dispatch:
+jobs:
+  after-release:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Show parametros
+          run: echo "===============> Version from ${GITHUB_REF##*/}"
