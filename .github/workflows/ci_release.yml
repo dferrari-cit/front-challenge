@@ -17,7 +17,7 @@ jobs:
     name: Releases and Tags
     runs-on: ubuntu-latest
     outputs:
-        version: ${{ steps.set_var.outputs.version }}
+        version: ${{ steps.get_version.outputs.version }}
     defaults:
       run:
         shell: bash
