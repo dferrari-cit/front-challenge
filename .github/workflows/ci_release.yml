@@ -16,18 +16,20 @@ jobs:
     needs: after-release #dependencia
     name: Releases and Tags
     runs-on: ubuntu-latest
+    outputs:
+        version: ${{ steps.set_var.outputs.version }}
     defaults:
       run:
         shell: bash
     steps:
         - name: Get Version
           id: get_version
-          run:  echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          run:  echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         - name: Create GitHub Release
-          run: echo "===============> Version from ${{ env.VERSION }}"
+          run: echo "===============> Version from ${{ env.version }}"
   final:
     needs: release-tag
     runs-on: ubuntu-latest
     steps:
         - name: Teste final
-          run: echo "===============> Teste ${{ env.VERSION }}"
+          run: echo "===============> Teste ${{ needs.release-tag.outputs.version }}"
