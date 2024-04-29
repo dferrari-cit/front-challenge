@@ -2,7 +2,9 @@ name: Workflow Manual
 
 on: 
     workflow_dispatch:
-
+env:
+  BRANCH_NAME: ${{ github.ref_name }} 
+  VERSION: ${{ github.ref##*/ }}
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -11,3 +13,5 @@ jobs:
               run: env | grep ^GITHUB
             - name: Show ref v1
               run: echo "===============> Version from $GITHUB_REF"
+            - name: Show ref v2
+              run: echo "===============> Version from ${{ env.VERSION }}"
