@@ -20,10 +20,13 @@ jobs:
       run:
         shell: bash
     steps:
+        - name: Get Version
+          id: get_version
+          run:  echo "::set-output name=version::${GITHUB_REF##*/}"
         - name: Create GitHub Release
           uses: ncipollo/release-action@v1
           with:
             updateOnlyUnreleased: true
             body: "Version from ${{ github.ref }}"
-            tag: "1.0.0"
+            tag: ${{ steps.get_version.outputs.version }}
             makeLatest: "latest"
