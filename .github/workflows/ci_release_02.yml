@@ -19,19 +19,21 @@ jobs:
     needs: after-release #dependencia
     name: Releases and Tags
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
     defaults:
       run:
         shell: bash
     steps:
         - name: Get Version
           id: get_version
-          run:  echo "version=${GITHUB_REF##*/}" >> "$GITHUB_ENV"
+          run:  echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
         - name: Create GitHub Release
           uses: ncipollo/release-action@v1
           with:
             updateOnlyUnreleased: true
             body: "Version from ${{ github.ref }}"
-            tag: ${{ env.version }}
+            tag: ${{ steps.get_version.outputs.version }}
             commit: ${{ env.BRANCH_NAME }}
             makeLatest: "latest"
   final:
@@ -39,4 +41,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Teste final
-          run: echo "===============> Teste ${{ env.version }}"
+          run: echo "===============> Teste ${{ needs.release-tag.outputs.version }}"
