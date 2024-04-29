@@ -1,7 +1,8 @@
-name: Workflow Manual 02
+name: (CI/CD) - Dev Deployment Validation 
 
+#disparo manual
 on: 
-    workflow_dispatch: #disparo manual
+  workflow_dispatch: 
 
 jobs:
     build:
