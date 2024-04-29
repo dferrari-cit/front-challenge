@@ -1,0 +1,15 @@
+name: Criando nova tag
+
+on: 
+    push:
+        tags:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Show ref v1
+              run: echo "===============> Version from $GITHUB_REF"
+            - name: Show ref v1 - detail
+              run: echo "===============> Version from ${GITHUB_REF##*/}"
+   
