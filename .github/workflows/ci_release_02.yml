@@ -33,7 +33,7 @@ jobs:
           id: release
           with:
             updateOnlyUnreleased: true
-            bodyFile: ".github/docs/release_body.md"
+            bodyFile: "${{ github.workspace }}/.github/docs/release_body.md"
             commit: "main"
             tag: '${GITHUB_REF##*/}'
             makeLatest: "latest"
