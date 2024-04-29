@@ -23,7 +23,7 @@ jobs:
     steps:
         - name: Get Version
           id: get_version
-          run:  echo "VERSION=${GITHUB_REF##*/}" >> "$env.GITHUB_ENV"
+          run:  echo "VERSION=${GITHUB_REF##*/}" >> $env:GITHUB_ENV
         - name: Create GitHub Release
           run: echo "===============> Version from ${{ env.VERSION }}"
   final:
