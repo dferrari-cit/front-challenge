@@ -9,4 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Show parametros
-          run: echo "nome: ${{ github.event.release.name }} - descricao: ${{ github.event.release.body }} - tag: ${{ github.event.release.tag_name }}"
+          run: echo "===============> Version from ${GITHUB_REF##*/}"
+          #run: echo "nome: ${{ github.event.release.name }} - descricao: ${{ github.event.release.body }} - tag: ${{ github.event.release.tag_name }}"
