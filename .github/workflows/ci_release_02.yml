@@ -24,6 +24,6 @@ jobs:
           uses: ncipollo/release-action@v1
           with:
             updateOnlyUnreleased: true
-            body: "Version from ${GITHUB_REF}"
-            tag: '${GITHUB_REF##*/}'
+            body: "Version from ${{ github.ref }}"
+            tag: "1.0.0"
             makeLatest: "latest"
