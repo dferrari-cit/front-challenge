@@ -9,6 +9,7 @@ permissions:
   contents: write
 env:
   BRANCH_NAME: ${{ github.ref_name }} 
+  VERSION: ""
 jobs:
   after-release:
     runs-on: ubuntu-latest
@@ -25,13 +26,14 @@ jobs:
     steps:
         - name: Get Version
           id: get_version
-          run:  echo "::set-output name=version::${GITHUB_REF##*/}"
+          run: EXPORT $VERSION="${GITHUB_REF##*/}"
+          #run:  echo "::set-output name=version::${GITHUB_REF##*/}"
         - name: Create GitHub Release
           uses: ncipollo/release-action@v1
           with:
             updateOnlyUnreleased: true
             body: "Version from ${{ github.ref }}"
-            tag: ${{ steps.get_version.outputs.version }}
+            tag: ${{ env.VERSION }}
             commit: ${{ env.BRANCH_NAME }}
             makeLatest: "latest"
   final:
@@ -39,4 +41,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Teste final
-          run: echo "===============> Teste ${{ steps.get_version.outputs.version }}"
+          run: echo "===============> Teste ${{ env.VERSION }}"
