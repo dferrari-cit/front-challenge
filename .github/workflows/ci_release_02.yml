@@ -39,4 +39,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Teste final
-          run: echo "===============> Teste $version"
+          run: echo "===============> Teste ${version}"
