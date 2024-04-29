@@ -3,9 +3,72 @@ on:
   push:
     branches:
       - release/*
+permissions:
+  pull-requests: write
+  contents: write
+env:
+  AUTOMATION_ADDITIONAL_SETTINGS_REPOSITORY: dferrari-cit/front-challenge
+  AUTOMATION_ADDITIONAL_SETTINGS_PATH: automation-additional-settings
+  AUTOMATION_ADDITTONAL_SETTINGS_FOLDER: front-challenge
+  GITHUB_TOKEN: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+  GITHUB_OWNER: ${{ vars.ACTIONS_GITHUB_OWNER }}
+  RELEASE_VERSION: v.1.0.
 jobs:
   after-release:
     runs-on: ubuntu-latest
     steps:
         - name: Show parametros
           run: echo "===============> Version from ${GITHUB_REF##*/}"
+  release-tag:
+    needs: after-release #dependencia
+    name: Releases and Tags
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout ${{ github.repository }}
+      uses: actions/checkout@v3
+    - name: Checkout ${{ env.AUTOMATION_ADDITIONAL_SETTINGS_REPOSITORY }}
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ env.AUTOMATION_ADDITIONAL_SETTINGS_REPOSITORY }}
+        path: ${{ env.AUTOMATION_ADDITIONAL_SETTINGS_PATH }}
+        ref: develop
+        token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+    - name: Set Environment Variables
+      uses: ./.github/actions/setvars
+      with:
+        varFilePath: ${{ env.AUTOMATION_ADDITIONAL_SETTINGS_PATH }}/${{ env.AUTOMATION_ADDITTONAL_SETTINGS_FOLDER }}/variables/global.env
+    - name: Contribute List
+      uses: akhilmhdh/contributors-readme-action@v2.3.6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Contribute List
+      uses: akhilmhdh/contributors-readme-action@v2.3.6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Generate changelog
+      id: changelog
+      uses: jaywcjlove/changelog-generator@main
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\]|Renovate Bot)
+        filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+    - name: Prepare Release Body
+      uses: cschleiden/replace-tokens@v1
+      with:
+        files: '["${{ github.workspace }}/.github/docs/release_body.md"]'
+      env:
+        RELEASE_TAG_LATEST_VERSION: ${GITHUB_REF##*/}
+        RELEASE_TAG_CHANGES: ${{ steps.changelog.outputs.changelog }}
+        ACTOR: ${{ env.ACTOR }}
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1
+      id: release
+      with:
+        updateOnlyUnreleased: true
+        bodyFile: ".github/docs/release_body.md"
+        commit: "main"
+        tag: '${GITHUB_REF##*/}'
+        makeLatest: "latest"
